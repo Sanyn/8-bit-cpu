@@ -1,0 +1,114 @@
+Simple 8 bit processor unit with ram, rom, register and simple gpu support.
+
+The cpu has a programmed:
+
+Register A
+Register B
+Memory address register
+Argument register (unused)
+Instruction register
+Output register
+
+Program counter register
+Program stepper counter register
+
+256 byte pre-programable RAM
+8192 byte programable ROM
+
+0-flag for Register A
+
+How the cpu works:
+
+Registers:
+Most of the registers are write-only.
+Exceptions:
+Register A
+Register B
+Argument register
+Program counter register
+These are read-write registers
+
+Counter type registers have an extra function, which increases it's value by 1
+
+Read more about register in the reg_doc.txt
+
+Random Acces Memory:
+The RAM module is a read-write memory.
+The standard RAM size is 256.
+On reading/writing from/to the RAM, the addres will be the data in the Memory Address Register.
+The RAM initialises it's values from the ram.txt file.
+Changing it programs the cpu.
+
+Read more about the RAM module in the ram_doc.txt
+
+Read-only Memory:
+The ROM module is a read-only memory.
+It translates the macrocode into microcode.
+The ROM initialises it's values from the rom.txt file.
+Modifying that will change the behaviour of the processor, but it also makes it even more programable
+The address it reads from is a 13 bit value: 
+- The first bit comes from the 0-flag.
+- The second to ninth bits comes from the Instruction register
+- The tenth to thirteenth bits come the program stepper counter register.
+The standard size is 2^13 = 8192
+
+Read more about the ROM module in the rom_doc.txt
+
+The bus:
+The bus works similarly to a register.
+The processor is programmed, so every read/write command reads/writes from/to the bus.
+Because of this, each read and write command is executed at a different time, and is a separate microcode.
+
+The GPU:
+The GPU is a really simple GPU.
+It's more like a RAM, and it's content is displayed in a simple window
+As it is a really early alpha, you can read more about it in the gpu_doc.txt file
+I advise you not to use it.
+
+The gpu.py uses John Zelle's graphics.py
+graphics.py and the folder is not my work.
+I included it in this project, so you don't have to install is separately.
+You can find in at this link:
+https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjjta29i_nwAhVvhosKHTDoBuMQFjAAegQIAhAD&url=https%3A%2F%2Fmcsp.wartburg.edu%2Fzelle%2Fpython%2Fgraphics.py&usg=AOvVaw0BK1u3K7Zlz11wKnnaJKPS
+And here is a reference sheet for it:
+https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjjta29i_nwAhVvhosKHTDoBuMQFjAJegQIExAD&url=https%3A%2F%2Fmcsp.wartburg.edu%2Fzelle%2Fpython%2Fgraphics%2Fgraphics.pdf&usg=AOvVaw3Qdu38J2jXJrNYPVq8XlFi
+
+
+Microcode:
+Microcode is the most basic building block of the CPU.
+The ROM contains these microcodes.
+You can read about the exact microcodes in the microcode_doc.txt
+
+Macrocode:
+The Macrocode is the interface between the programmer and the CPU.
+The RAM contains the macrocode.
+Some macrocode requires an argument in the next byte in the RAM.
+You can read about the macrocodes, and the exact microcodes of the given macrocodes in the macrocode_doc.txt
+
+Execution:
+The execution always starts from the 0 address in the RAM.
+The 255 (HLT) macrocode stops the execution.
+At the end of each cycle, the value of the Output register is printed out into the standard IO. 
+
+Setting up a cpu:
+You can just import the cpu.py file using:
+from cpu import *
+When creating a CPU variable, it requires a single argument, which is the target frequency of the CPU.
+It can be set to any integer value, and if the processor runs faste, than the target frequency, it will slow down the cpu.
+It is a higher limit of the frequency, but if your computer isn't fast enough, it will run slower.
+To run the CPU, you can just call the function execute().
+
+If you set the frequency to more then a 1000, the program will run as fast as it can.
+
+The included main.py is a sample on how to do this.
+
+Compiler:
+Because writing numbers into the ram.txt can be confusing,  I included a simple compiler with the cpu.
+When you run the compiler.py file, the program creates a ram.txt file from the given program.ic file.
+The program.ic file should contain 2 types of lines:
+Either a variable declaration. This can be done the with or without giving it an initial value.
+Using a function. Some functions require an argument.
+The argument can either be a number, or the name of the variable.
+In the second case, the compiler will use the address of the used variable as the argument.
+
+You can read more about the compiler in the prog_doc.txt

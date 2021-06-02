@@ -1,0 +1,15 @@
+var x = 4
+var y = 3
+var z = 0
+LMA(y)
+JMZ(18)
+LMA(z)
+ADM(x)
+STA(z)
+LMA(y)
+SBD(1)
+STA(y)
+JMP(0)
+LMA(z)
+OUT()
+HLT()

@@ -1,0 +1,85 @@
+Functions:
+
+0 NOP()
+1 LDA(data)
+2 LMA(address)
+3 ADD(data)
+4 ADM(address)
+5 SBD(data)
+6 SBM(address)
+7 OUT()
+8 STA(address)
+9 JMP(address)
+10 JMZ(address)
+255 HLT()
+
+NOP():
+No operation
+
+LDA(data):
+The "data" argument is loaded into the A register
+
+LMA(address):
+The data in the memory at the "address" argument is loaded into the A register
+
+ADD(data):
+The "data" argument is added to the A register, and loaded into the A register
+
+ADM(address):
+The data in the memory at the "address" argument is added to the A register, and loaded into the A register
+
+SBD(data):
+The "data" argument is subtracted from the A register, and loaded into the A register
+
+SBM(address):
+The data in the memory at the "address" argument is subtracted from the A register, and loaded into the A register
+
+OUT():
+The data from the A register is loaded into the output register.
+
+STA(address):
+The data from the A register is stored in the memory at the "address" argument.
+
+JMP(address):
+The code execution jumps to the "address" argument in the memory.
+
+JMZ(address):
+The code execution jumps to the "address" argument in the memory if the data in the A register is 00000000
+
+HLT():
+Halts the code execution.
+
+Declare a variable:
+
+var 'variable character'
+
+Where:
+'variable character' is a single character which represents the variable in the code.
+
+in this case the variable starts as memory trash.
+
+var 'variable character' = 'value'
+Where:
+'variable character' is a single character which represents the variable in the code.
+'value' is the value of the initialised value of the variable.
+
+The problem with this compiler is that  it can be hard to predict where the jump command have to jump.
+It probably might be easier to leave it zero, and overwrite it in the ram.txt
+Otherwise you have to count every line except the variable declarations, and every function with an argument counts as 2 lines.
+
+A simple sample program, which multiplies the x and y variables:
+var x = 4
+var y = 3
+var z = 0
+LMA(y)
+JMZ(18)
+LMA(z)
+ADM(x)
+STA(z)
+LMA(y)
+SBD(1)
+STA(y)
+JMP(0)
+LMA(z)
+OUT()
+HLT()
